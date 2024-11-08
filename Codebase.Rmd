@@ -1,0 +1,355 @@
+---
+title: "Deciphering Parkinson's: Vocal Biomarkers and Demographic Insights"
+author: "Fanny D'Souza"
+date: "2023-11-29"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+```{r setup, include=FALSE}
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+library(ggplot2)
+
+```
+
+
+
+
+```{r}
+# Set the working directory (if necessary)
+setwd("C:/main/Parkinsons_VoiceMetrics")
+
+# Read the CSV file
+data <- read.csv("parkinsonsdata.csv")
+
+# View the first few rows of the data
+head(data)
+
+```
+
+
+```{r}
+#Missing values by column
+missing_values <- colSums(is.na(data))
+print(missing_values)
+
+```
+```{r}
+#Descriptive Statistics
+summary(data)
+```
+
+
+```{r}
+#Checking the distribution of voice metric: Jitter 
+
+ggplot(data, aes(y = Jitter...)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Jitter Abs", y="Jitter Values")
+
+ggplot(data, aes(y = Jitter.Abs.)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Jitter Abs", y="Jitter Values")
+
+ggplot(data, aes(y = Jitter.RAP)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Jitter RAP", y="Jitter Values")
+
+ggplot(data, aes(y = Jitter.PPQ5)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Jitter PPQ5", y="Jitter Values")
+
+ggplot(data, aes(y = Jitter.DDP)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Jitter DDP", y="Jitter Values")
+
+```
+
+```{r}
+
+# Assuming 'data' is your dataframe and 'Jitter' is the column you're analyzing
+
+# Remove rows where Jitter values are greater than 3e-4
+clean_data <- data[data$Jitter <= 3e-4, ]
+
+# Now 'clean_data' contains only the rows where Jitter values are less than or equal to 3e-4
+
+
+```
+
+
+```{r}
+#Checking the distribution of voice metric: Shimmer
+
+ggplot(data, aes(y = Shimmer)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer", y="Shimmer Values")
+
+ggplot(data, aes(y = Shimmer.dB.)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer dB", y="Shimmer Values")
+
+ggplot(data, aes(y = Shimmer.APQ3)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer APQ3", y="Shimmer Values")
+
+ggplot(data, aes(y = Shimmer.APQ5)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer APQ5", y="Shimmer Values")
+
+ggplot(data, aes(y = Shimmer.APQ11)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer APQ11", y="Shimmer Values")
+
+ggplot(data, aes(y = Shimmer.DDA)) +
+  geom_boxplot() +
+  labs(title="Box Plot of Shimmer DDA", y="Shimmer Values")
+
+
+```
+
+
+```{r}
+#Checking the distribution of voice metric: NHR
+
+ggplot(data, aes(y = NHR)) +
+  geom_boxplot() +
+  labs(title="Box Plot of NHR", y="NHR Values")
+
+
+```
+
+
+```{r}
+#Checking the distribution of indicators of Parkinson's severity such as ‘motor_UPDRS’ and ‘total_UPDRS’
+
+ggplot(data, aes(y = motor_UPDRS)) +
+  geom_boxplot() +
+  labs(title="Box Plot of motor_UPDRS", y="motor_UPDRS Values")
+
+
+ggplot(data, aes(y = total_UPDRS)) +
+  geom_boxplot() +
+  labs(title="Box Plot of total_UPDRS", y="motor_UPDRS Values")
+
+
+```
+STATISTICAL ANALYSIS
+
+Null Hypothesis:
+1.	There is no relationship between age and voice metrics in Parkinson's patients.
+Alternative Hypothesis:
+1.	There is a significant relationship between age and voice metrics in Parkinson's patients.
+```{r}
+names(data)
+```
+
+
+```{r}
+#Checking for normality in variables like age and voice metrics
+
+#1.  'jitter...' 
+hist(data$`Jitter...`, prob = TRUE, main = "Histogram of jitter...", xlab = "jitter... values", col = "lightblue")
+
+# Overlay a normal distribution curve
+curve(dnorm(x, mean = mean(data$`Jitter...`), sd = sd(data$`Jitter...`)), add = TRUE, col = "red", lwd = 2)
+
+
+#2. Voice metric -a)Jitter.Abs.
+
+
+# Create a histogram for the 'Jitter.Abs.' variable
+hist(data$`Jitter.Abs.`, prob = TRUE, main = "Histogram of Jitter.Abs.", xlab = "Jitter.Abs. values", col = "lightblue")
+
+# Overlay a normal distribution curve
+curve(dnorm(x, mean = mean(data$`Jitter.Abs.`), sd = sd(data$`Jitter.Abs.`)), add = TRUE, col = "red", lwd = 2)
+
+
+
+#3. Voice metric -a)Jitter.RAP
+
+hist(data$`Jitter.RAP`, prob = TRUE, main = "Histogram of Jitter.RAP", xlab = "Jitter.RAP values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$`Jitter.RAP`, na.rm = TRUE), sd = sd(data$`Jitter.RAP`, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+
+#4.Voice metric -a)Jitter.PPQ5
+
+hist(data$`Jitter.PPQ5`, prob = TRUE, main = "Histogram of Jitter.PPQ5", xlab = "Jitter.PPQ5 values", col = "lightblue")
+
+# Overlay a normal distribution curve
+curve(dnorm(x, mean = mean(data$`Jitter.PPQ5`, na.rm = TRUE), sd = sd(data$`Jitter.PPQ5`, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#5. Voice metric -a)Jitter.DDP
+
+hist(data$`Jitter.DDP`, prob = TRUE, main = "Histogram of Jitter.DDP", xlab = "Jitter.DDP values", col = "lightblue")
+
+# Overlay a normal distribution curve
+curve(dnorm(x, mean = mean(data$`Jitter.DDP`, na.rm = TRUE), sd = sd(data$`Jitter.DDP`, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+
+#SHIMMER
+
+#a)"Shimmer"
+
+hist(data$Shimmer, prob = TRUE, main = "Histogram of Shimmer", xlab = "Shimmer values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$Shimmer, na.rm = TRUE), sd = sd(data$Shimmer, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#b)Shimmer.dB
+
+hist(data$`Shimmer.dB.`, prob = TRUE, main = "Histogram of Shimmer.dB.", xlab = "Shimmer.dB. values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$`Shimmer.dB.`, na.rm = TRUE), sd = sd(data$`Shimmer.dB.`, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#c)Shimmer.APQ3
+
+hist(data$Shimmer.APQ3, prob = TRUE, main = "Histogram of Shimmer.APQ3", xlab = "Shimmer.APQ3 values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$Shimmer.APQ3, na.rm = TRUE), sd = sd(data$Shimmer.APQ3, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#d)Shimmer.APQ5
+
+hist(data$Shimmer.APQ5, prob = TRUE, main = "Histogram of Shimmer.APQ5", xlab = "Shimmer.APQ5 values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$Shimmer.APQ5, na.rm = TRUE), sd = sd(data$Shimmer.APQ5, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#e)Shimmer.APQ11
+
+hist(data$Shimmer.APQ11, prob = TRUE, main = "Histogram of Shimmer.APQ11", xlab = "Shimmer.APQ11 values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$Shimmer.APQ11, na.rm = TRUE), sd = sd(data$Shimmer.APQ11, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+
+#f)Shimmer.DDA
+
+hist(data$Shimmer.DDA, prob = TRUE, main = "Histogram of Shimmer.DDA", xlab = "Shimmer.DDA values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$Shimmer.DDA, na.rm = TRUE), sd = sd(data$Shimmer.DDA, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+#NHR
+
+
+hist(data$NHR, prob = TRUE, main = "Histogram of NHR", xlab = "NHR values", col = "lightblue")
+
+curve(dnorm(x, mean = mean(data$NHR, na.rm = TRUE), sd = sd(data$NHR, na.rm = TRUE)), add = TRUE, col = "red", lwd = 2)
+
+
+
+```
+```{r}
+#CORRELATION BETWEEN AGE AND JITTER
+
+correlation_age_jitter <- cor.test(data$age, data$`Jitter.Abs.`, method = "spearman")
+print(correlation_age_jitter)
+
+#Similar for the rest, but check the next code for a better approach
+
+
+```
+```{r}
+#Spear man's correlation between age and voice metrics
+
+voice_metrics <- c("Jitter.Abs.", "Jitter.RAP", "Jitter.PPQ5", "Jitter.DDP", 
+                   "Shimmer", "Shimmer.dB.", "Shimmer.APQ3", "Shimmer.APQ5", 
+                   "Shimmer.APQ11", "Shimmer.DDA", "NHR","Jitter...")
+
+alpha <- 0.05
+
+# Create an empty data frame to store results
+results <- data.frame(Variable = character(0), 
+                       Correlation = numeric(0), 
+                       p_value = numeric(0), 
+                       Significant = character(0))
+
+# Perform correlation tests for each variable
+for (variable in voice_metrics) {
+  correlation_result <- cor.test(data$age, data[[variable]], method = "spearman")
+  is_significant <- ifelse(correlation_result$p.value < alpha, "Yes", "No")
+  results <- rbind(results, data.frame(Variable = variable, 
+                                       Correlation = correlation_result$estimate, 
+                                       p_value = correlation_result$p.value, 
+                                       Significant = is_significant))
+}
+
+# Print the results
+print(results)
+
+```
+Null: The mean values of voice metrics are the same for both sexes.
+Alternate:	The mean values of voice metrics differ between the sexes.
+
+```{r}
+#Mann Whitney Test to check for significant differences between 2 independent groups(Male and Female) and  voice metrics
+
+
+voice_metrics <- c("Jitter.Abs.", "Jitter.RAP", "Jitter.PPQ5", "Jitter.DDP",  "Shimmer","Shimmer.dB.","Shimmer.APQ3","Shimmer.APQ5","Shimmer.APQ11", "Shimmer.DDA"  
+,"NHR")
+
+alpha <- 0.05
+
+# Create an empty data frame to store results
+results <- data.frame(Variable = character(0), p_value = numeric(0), Significant = character(0))
+
+# Perform Mann-Whitney U tests for each variable
+for (variable in voice_metrics) {
+  mwu_test <- wilcox.test(data[[variable]] ~ data$sex, na.action = "na.omit")
+  is_significant <- ifelse(mwu_test$p.value < alpha, "Yes", "No")
+  results <- rbind(results, data.frame(Variable = variable, p_value = mwu_test$p.value, Significant = is_significant))
+}
+
+print(results)
+
+
+```
+	RQ2: Can voice metrics, along with demographic factors (age and sex), reliably predict the severity of Parkinson's disease as indicated by UPDRS scores?
+
+Null Hypothesis:
+1.	Voice metrics, age, and sex cannot predict the severity of Parkinson's disease.
+Alternative Hypothesis:
+1.	Voice metrics, age, and sex can significantly predict the severity of Parkinson's disease.
+
+```{r}
+
+names(data)
+
+```
+
+```{r}
+
+model <- lm(total_UPDRS ~ age + sex + Jitter... + Jitter.Abs. + Jitter.RAP + Jitter.PPQ5 + Jitter.DDP + Shimmer + Shimmer.dB., data = data)
+
+```
+
+```{r}
+
+# Check linearity
+plot(model, which = 1)
+
+# Check independence of errors
+plot(model, which = 3)
+
+# Check homoscedasticity
+plot(model, which = 2)
+
+# Check normality of residuals
+hist(residuals(model))
+qqnorm(residuals(model))
+qqline(residuals(model))
+
+```
+```{r}
+summary(model)
+```
+
